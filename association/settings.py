@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-yzy2j@o_5)$xk)
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'web-production-d590.up.railway.app/']
 
 
 # Application definition
@@ -137,3 +137,6 @@ EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "default from email"
+
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-d590.up.railway.app/']
