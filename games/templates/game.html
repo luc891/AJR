@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1 id="title">{{game.title}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Page content -->
+
+<section id="main">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="images-container">
+                    <img class="game" src="/{{game.cover}}" alt="Boite de {{game.title}}" title="Boite de {{game.title}}" style="max-height:500px; max-width:500px;">   
+            </div>    
+        </div>
+        
+        <div class="col-md-7">
+            <div>
+                <div class="description" style="text-align: justify; margin-bottom: 50px;">{{game.description}}</div>
+                <!--Age, Joueurs, Durée-->
+                <div style="padding-bottom:15px; display: flex;">
+                    <div class="details"><img class="age" height="50px" src="{% static 'img/age.jpeg'%}">dès {{game.min_age}} ans</div>
+                    <div class="details"><img class="players" height="50px" src="{% static 'img/nb_players.png'%}">De {{game.min_players}} à {{game.max_players}} joueurs</div>
+                    <div class="details"><img class="time" height="50px" src="{% static 'img/clock.jpeg'%}">{{game.duration}} min env.</div>
+                </div>
+                <!--Extension-->
+                {% if game.extension %}
+                <div style="padding-bottom:15px; display: flex;">
+                    <div class="details" style="font-size: 14px; font-weight: bold;"><img class="age" height="50px" src="{% static 'img/plus.png'%}">Attention, ceci est un extension et nécessite le jeu de base pour pouvoir y jouer !</div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md- pro_detail">
+                <div style="max-width: 500px; margin: auto; display: flex; text-align: center;">
+                    <button class="btn btn-primary" style="border-radius: 20%; margin: auto;" name="game-btn" id="{{game.title}}" type="button" onclick="game_request()">Je voudrais jouer à ce jeu à la prochaine soirée</button>
+                    <h5 id="message"></h5>  
+                </div>
+            </div>
+            <div id="user" style="display:none;">{{user}}</div>
+            {% if user == game.owner %}
+            {% csrf_token %}
+            <div style="display: flex;">
+                <div class="col-md-6 pro_detail" >
+                    <div style="max-width: 300px; margin-top: 20px; float: left;">
+                        <button class="btn btn-primary" style="border-radius: 20%; margin: auto;" type="button" onclick="remove_game()">Enlever ce jeu du catalogue</button>
+                    </div>
+                </div>
+                <div class="col-md-6 pro_detail">
+                    <div style="max-width: 300px; margin-top: 20px; float: right;">
+                        <a href="{% url 'modify_game' game.title %}"><button class="btn btn-primary" style="border-radius: 20%; margin: auto;" type="button">Modifier les informations du jeu</button></a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</section>
+
+<section id="removed" style="display:none;">
+    <div class="row">
+        <div class="col-md-4">
+            <h5>Jeu supprimé du catalogue.</h5>
+        </div>
+    </div>
+</section>
+{% endblock %}

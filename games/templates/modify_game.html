@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>{{game.title}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main style="display: flex;">
+    <div class="mb-4 section" id="add-game" style="display:block;">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="my-5">
+                        <div class="alert alert-danger" role="alert">{{message}}</div>  
+                        <form action="{% url 'modify_game' game.title %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-floating">
+                                <input class="form-control" id="title" name="title" type="text" placeholder="{{game.title}}" value="{{game.title}}"/>
+                                <label for="title">Titre</label>
+                            </div>
+                            <div>
+                                <input id="extension" name="extension" value="{{game.extension}}" type="radio"/>
+                                <label for="extension">Est-ce une extension ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="min_players" name="min_players" type="number" placeholder="{{game.min_players}}" value="{{game.min_players}}"/>
+                                <label for="min_players">Nombre minimum de joueurs ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="max_players" name="max_players" type="number" placeholder="{{game.max_players}}" value="{{game.max_players}}"/>
+                                <label for="max_players">Nombre maximal de joueurs ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="min_age" name="min_age" type="number" placeholder="{{game.min_age}}" value="{{game.min_age}}"/>
+                                <label for="min_age">A partir de quel âge ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="duration" name="duration" type="number" placeholder="{{game.duration}}" value="{{game.duration}}"/>
+                                <label for="duration">Quelle durée moyenne pour une partie ? (en min)</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="cover" name="cover" type="file" placeholder="{{game.cover}}" value="{{game.cover}}"/>
+                                <label for="cover">Illustration de couverture</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="description" name="description" type="textarea" placeholder="{{game.description}}" value="{{game.description}}"/>
+                                <label for="description">Description</label>
+                            </div>
+                            <div class="form-floating">
+                                <select class="form-control" id="genre" name="genre" type="text" style="text-align: center; vertical-align:center;">
+                                    {% for genre in genres %}
+                                    <option>{{genre}}</option>
+                                    {% endfor %}
+                                    <option selected>{{game.genre}}</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="owner" value="{{user.id}}">
+                            <div style="max-width: 200px; margin: auto;"><button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" id="submitButton" type="submit">Envoyer</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

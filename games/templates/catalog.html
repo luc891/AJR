@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#selectcategory').addEventListener('change', displayCategory) 
+        document.querySelector('#selectage').addEventListener('change', displayAge) 
+    });
+
+    function displayCategory() {
+        var list = document.querySelectorAll('.jeu')
+        for (i=0; i<list.length; i++) {
+            list[i].style.display = 'block'
+        }
+        for (i=0; i<list.length; i++) {
+            if (list[i].querySelector('.category').innerHTML != this.value) {
+                list[i].style.display = 'none'
+            }
+        };
+        if (this.value === 'Tout'){
+            for (i=0; i<list.length; i++) {
+            list[i].style.display = 'block'
+            }
+        };
+        document.querySelector('#selectage').value = 'Tout';
+    };
+
+    function displayAge() {
+        var list = document.querySelectorAll('.jeu')
+        for (i=0; i<list.length; i++) {
+            list[i].style.display = 'none'
+        }
+        for (i=0; i<list.length; i++) {
+            if (parseInt(list[i].querySelector('.age').innerHTML) <= this.value) {
+                list[i].style.display = 'block'
+            }
+        };
+        if (this.value === 'Tout'){
+            for (i=0; i<list.length; i++) {
+            list[i].style.display = 'block'
+            }
+        };
+        document.querySelector('#selectcategory').value = 'Tout';   
+    };
+</script>
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Catalogue</h1>
+                    <span class="subheading">Retrouvez ici tous nos jeux</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Games Catalog -->
+<div class="row mb-2" style="padding-bottom: 30px; text-align: center;">
+    <div class="col-md-4" id="selectcategoryContainer" style="margin:auto;">
+        <p style="margin: 0px;">Filtrer par catégorie</p>
+        <select id="selectcategory">
+            <option value="Tout" style="text-align: center;">Tout</option>
+            {% for category in categories %}
+            <option value="{{category}}">{{category}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-4" id="selectageContainer" style="margin:auto;" >
+        <p style="margin: 0px;">Filtrer par âge</p>
+        <select id="selectage">
+            <option value="Tout" style="text-align: center;">Tout</option>
+            {% for i in age_min %}
+            <option value="{{i}}">{{i}} ans</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<div class="row mb-2">
+{% for game in games %}
+    <div class="col-md-6 jeu '{{game.genre}}'' ">
+        <a class="text-dark" href="{% url 'game' game.title %}">
+            <div class="card flex-md-row mb-4 box-shadow h-md-250" >
+                <div class="card-body d-flex flex-column align-items-start">
+                    <strong class="d-inline-block mb-2 text-primary category">{{game.genre}}</strong>
+                    <h3 class="mb-0">{{game.title}}</h3>
+                    {% if game.extension %}
+                        <div class="mb-1 text-muted">Extension</div>
+                    {% endif %}
+                    <p class="card-text mb-auto">{{ game.description|truncatechars:250 }}</p>
+                    <strong class="d-inline-block mb-2 text-primary">A partir de <strong class="age">{{game.min_age}}</strong> ans</strong>
+                </div>
+                <img class="card-img-right flex d-none d-md-block game" src="{{game.cover}}" style="max-height:300px; max-width:300px;">
+            </div>
+        </a>
+    </div>
+{%endfor%}  
+</div>
+
+
+{% endblock %}

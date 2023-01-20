@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+<!-- Page Header -->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Bienvenue</h1>
+                    <span class="subheading">L'association des Joueurs de Rantzwiller est heureuse de vous accueillir sur son site internet.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- News Posts -->
+    <div>
+        <div>
+            <div class="title">
+                <h3>Nos Actualités</h3>
+            </div>
+            </div>
+            {% for info in news %}
+            <article class="mb-4">
+                <div class="container px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            <h4>Par {{info.user}} le {{info.date}}</h4>
+                            <p>{{info.text}}</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

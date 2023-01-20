@@ -1,0 +1,278 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#personnal-btn').addEventListener('click', () => sectionDisplay ('#personnal'));
+        document.querySelector('#game-btn').addEventListener('click', () => sectionDisplay ('#add-game'));
+        document.querySelector('#games-btn').addEventListener('click', () => sectionDisplay ('#my-games'));
+        document.querySelector('#modify_info').addEventListener('click', function() {
+            document.querySelector('#current_info').style.display = 'none';
+            document.querySelector('#modif_info').style.display = 'block';
+            document.querySelector('#modif_password').style.display = 'none';
+        });
+        document.querySelector('#modify_password').addEventListener('click', function() {
+            document.querySelector('#current_info').style.display = 'none';
+            document.querySelector('#modif_info').style.display = 'none'
+            document.querySelector('#modif_password').style.display = 'block';
+        });
+        document.querySelector('#news-btn').addEventListener('click', () => sectionDisplay ('#add-news'));
+    
+    function sectionDisplay(id) {
+        var elements = document.querySelectorAll('.section')
+        elements.forEach(element => element.style.display = 'none');
+        document.querySelector(id).style.display = 'block';
+        document.querySelector('#current_info').style.display = 'block';
+        document.querySelector('#modif_info').style.display = 'none';
+        document.querySelector('#modif_password').style.display = 'none'
+    };
+});
+
+</script>
+
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Espace Personnel</h1>
+                    <span class="subheading">Vos informations</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<main style="display: flex;">
+
+    <!-- Left-side Nav Menu -->
+    <div class="sidebar">
+        <ul style="text-align: left;">
+            <li><button type="button" class="btn btn-primary" id="personnal-btn">Profil</button></li>
+            <li><button type="button" class="btn btn-primary" id="game-btn">Ajouter un jeu au catalogue de l'asso</button></li>
+            <li><button type="button" class="btn btn-primary" id="games-btn">Mes jeux</button></li>
+            {% if user.is_staff %}
+            <li><button type="button" class="btn btn-primary" id="news-btn">Rédiger une news</button></li>
+            {% endif %}            
+        </ul>
+    </div>
+
+    <!-- Profil Content -->
+    <div class="mb-4 section" id="personnal">
+        <div class="container px-4 px-lg-5" id="current_info">
+            <table class="table">
+                <h3>Vos informations personnelles</h3>
+                {% if messages %}
+                    {% for message in messages %}
+                    <h5>{{message}}</h5>
+                    {% endfor %}
+                {% endif %}
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Prénom</td>
+                        <td>{{user.first_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nom</td>
+                        <td>{{user.last_name}}</td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td>Adresse</td>
+                        <td>{{user.adress}}</td>
+                    </tr>
+                    <tr>
+                        <td>Téléphone</td>
+                        <td>{{user.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>E-mail</td>
+                        <td>{{user.username}}</button></td>
+                    </tr>
+                </tbody>
+                
+            </table>
+            <div style="max-width: 200px; margin: auto;"><button type="button" class="btn btn-primary" id="modify_info" style="border-radius: 10%; margin-bottom: 20px;">Modifier mes informations</button></div>
+            <div style="max-width: 200px; margin: auto;"><button type="button" class="btn btn-primary" id="modify_password" style="border-radius: 10%;">Modifier le mot de passe</button></div>
+        </div>
+
+        <!-- Edit details -->
+        <div class="container px-4 px-lg-5" style="display:none;" id="modif_info">
+            <form action="/modify" method="POST" >
+                {% csrf_token %}
+                <table class="table">
+                    <h3>Renseignez vos nouvelles informations</h3>
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Prénom</td>
+                            <td><input name="first_name" type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Nom</td>
+                            <td><input name="last_name" type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td><input name="adress" type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Téléphone</td>
+                            <td><input name="phone" type="tel" required/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="max-width: 200px; margin: auto;"><button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" type="submit">Valider</button></div>
+                <input hidden name="informations"/>
+            </form>
+        </div>
+
+        <!-- Change password -->
+        <div class="container px-4 px-lg-5" style="display:none;" id="modif_password">
+            <form id="chg_pass" action="/modify" method="POST" onSubmit="return pass()">
+                {% csrf_token %}
+                <table class="table">
+                    <h3>Nouveau mot de passe</h3>
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mot de passe</td>
+                            <td><input name="password1" type="password" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Confirmation</td>
+                            <td><input name="password2" type="password" required/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="max-width: 200px; margin: auto;"><button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" type="submit">Valider</button></div>
+                <input hidden name="password"/>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add a Game From-->
+    <div class="mb-4 section" id="add-game" style="display:none;">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="my-5">
+                        <div class="alert alert-danger" role="alert">{{message}}</div>  
+                        <form action="/profil" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-floating">
+                                <input class="form-control" id="title" name="title" type="text" placeholder="Titre ?"/>
+                                <label for="title">Titre</label>
+                            </div>
+                            <div>
+                                <input id="extension" name="extension" value="true" type="radio"/>
+                                <label for="extension">Est-ce une extension ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="min_players" name="min_players" type="number" placeholder="Nombre minimum de joueurs ?"/>
+                                <label for="min_players">Nombre minimum de joueurs ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="max_players" name="max_players" type="number" placeholder="Nombre maximal de joueurs ?"/>
+                                <label for="max_players">Nombre maximal de joueurs ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="min_age" name="min_age" type="number" placeholder="A partir de quel âge ?"/>
+                                <label for="min_age">A partir de quel âge ?</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="duration" name="duration" type="number" placeholder="Quelle durée moyenne pour une partie ? (en min)"/>
+                                <label for="duration">Quelle durée moyenne pour une partie ? (en min)</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="cover" name="cover" type="file" placeholder="Illustration de couverture"/>
+                                <label for="cover">Illustration de couverture</label>
+                            </div>
+                            <div class="form-floating">
+                                <input class="form-control" id="description" name="description" type="text" placeholder="Description"/>
+                                <label for="description">Description</label>
+                            </div>
+                            <div class="form-floating">
+                                <label for="genre">Type de jeu</label>
+                                <select class="form-control" id="genre" name="genre" type="text">
+                                    {% for genre in genres %}
+                                    <option selected>{{genre}}</option>
+                                    {% endfor %}
+                                    <option selected></option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="owner" value="{{user.id}}">
+                            <div style="max-width: 200px; margin: auto;"><button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" id="submitButton" type="submit">Envoyer</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Writing a news -->
+    <div class="mb-4 section" id="add-news"  style="display:none;">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="my-5">
+                        <div class="alert alert-danger" role="alert">{{message}}</div>  
+                        <form action="/index" method="POST">
+                            {% csrf_token %}
+                            <div class="form-floating" >
+                                <input type="text" class="form-control" id="text" name="text"  placeholder="News"/>
+                                <label for="text">Texte</label>
+                            </div>
+                            <div style="max-width: 200px; margin: auto;"><button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" id="submitButton" type="submit">Envoyer</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Games -->
+    <div class="row mb-2 section" id="my-games" style="display:none;">
+        {% for game in games %}
+            <div class="col-md-6 jeu '{{game.genre}}'' " style="float: left;">
+                <a class="text-dark" href="{% url 'game' game.title %}">
+                    <div class="card flex-md-row mb-4 box-shadow h-md-250" >
+                        <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="d-inline-block mb-2 text-primary category">{{game.genre}}</strong>
+                        <h3 class="mb-0">{{game.title}}</h3>
+                        {% if game.extension %}
+                        <div class="mb-1 text-muted">Extension</div>
+                        {% endif %}
+                        <p class="card-text mb-auto">{{ game.description|truncatechars:250 }}</p>
+                        <strong class="d-inline-block mb-2 text-primary">A partir de <strong class="age">{{game.min_age}}</strong> ans</strong>
+                        </div>
+                        <img class="card-img-right flex d-none d-md-block" height="200px" style="margin-top: 10px; margin-right: 5px;" src="{{game.cover}}">
+                    </div>
+                </a>
+            </div>
+        {%endfor%}  
+    </div>
+</main>
+
+{% endblock %}

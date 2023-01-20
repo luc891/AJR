@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Connexion</h1>
+                    <span class="subheading">Accédez à votre espace personnel</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Login Form -->
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="my-5">
+                    <div id="alert_message" class="alert alert-danger" role="alert">{{message}}</div>  
+                    <form action="/login" method="POST">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <input class="form-control" id="username" name="username" type="text" placeholder="Email..."/>
+                            <label for="username">Email</label>
+                        <div class="form-floating">
+                            <input class="form-control" id="password" name="password" type="password" placeholder="Mot de passe..."/>
+                            <label for="password">Mot de passe</label>
+                        </div>
+                        <button class="btn btn-primary btn-lg" style="border-radius: 20%; margin: 15px;" id="submitButton" type="submit">Envoyer</button>
+                    </form>
+                    
+                </div>
+               
+            </div>
+            <div class="my-5" style="text-align: center;"><a href="{% url 'password_reset' %}">Mot de passe oublié ?</a></div>
+        </div>
+    </div>
+</main>
+{% endblock %}

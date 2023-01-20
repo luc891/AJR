@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+<!-- Page Header-->
+<header class="masthead" style="background-color: #0085A1">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Inscription</h1>
+                    <span class="subheading">Vous pouvez utiliser cette page pour nous rejoindre</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Registration Form -->
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="my-5">
+                    <div class="alert alert-danger" role="alert">{{alert}}</div>  
+                    <form action="/register" method="POST">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <input class="form-control" id="last_name" name="last_name" type="text" placeholder="Nom..."/>
+                            <label for="last_name">Nom</label>
+                        <div class="form-floating">
+                            <input class="form-control" id="first_name" name="first_name" type="text" placeholder="Prénom..."/>
+                            <label for="first_name">Prénom</label>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="username" name="username" type="email" placeholder="Email..."/>
+                            <label for="username">Email</label>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="phone" name="phone" type="tel" placeholder="Téléphone..."/>
+                            <label for="phone">Téléphone</label>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="adress" name="adress" type="text" placeholder="Adresse..."/>
+                            <label for="adress">Adresse</label>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="password" name="password" type="password" placeholder="Mot de passe..."/>
+                            <label for="password">Mot de passe</label>
+                        </div>
+                        <button class="btn btn-primary" style="border-radius: 20%; margin: 15px;" id="submitButton" type="submit">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}
