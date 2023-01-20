@@ -10,8 +10,8 @@ from django.contrib import messages
 from .models import User, UserForm, Game, GameForm, ContactForm, NewsForm, News
 
 # Define local time as France
-import locale
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+#import locale
+#locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
 
 def index(request):
 
