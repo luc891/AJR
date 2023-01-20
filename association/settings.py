@@ -139,4 +139,4 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "default from email"
 
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-d590.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = ['web-production-d590.up.railway.app']
